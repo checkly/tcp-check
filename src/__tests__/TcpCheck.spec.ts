@@ -28,7 +28,6 @@ describe('TcpCheck', () => {
     test('returns a result for an open port', async () => {
       const options: TcpCheckOptions = { host: 'localhost', port: socketPort }
       const tcpCheckResult = await new TcpCheck().ping(options)
-      console.log(tcpCheckResult)
       expect(tcpCheckResult.responseTime).toBeGreaterThan(0)
     })
     test('returns ECONNREFUSED for a closed port', async () => {
