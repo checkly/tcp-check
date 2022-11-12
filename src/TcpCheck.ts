@@ -29,7 +29,7 @@ export class TcpCheck {
       this._startHrTime = process.hrtime()
       this._socket.connect(options.port, options.host)
     } catch (err) {
-      return { state: 'error', error: err as Error, responseTime: 0 }
+      return { state: 'ERROR', error: err as Error, responseTime: 0 }
     }
 
     return this._waitForEvent()
@@ -41,7 +41,7 @@ export class TcpCheck {
         this._endHrTime = process.hrtime(this._startHrTime)
         this._socket.off('error', fail)
         this._socket.destroy()
-        const result : TcpCheckResult = { state: 'success', responseTime: this._compileResponseTime() }
+        const result : TcpCheckResult = { state: 'SUCCESS', responseTime: this._compileResponseTime() }
         return resolve(result)
       }
 
@@ -49,7 +49,7 @@ export class TcpCheck {
         this._endHrTime = process.hrtime(this._startHrTime)
         this._socket.off('close', success)
         this._socket.destroy()
-        const result : TcpCheckResult = { state: 'error', error: err, responseTime: this._compileResponseTime() }
+        const result : TcpCheckResult = { state: 'ERROR', error: err, responseTime: this._compileResponseTime() }
         return resolve(result)
       }
 

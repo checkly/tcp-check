@@ -1,16 +1,16 @@
 interface TcpCheckResultSuccess {
-  state: 'success'
+  state: 'SUCCESS'
   responseTime: number
 }
 
 interface TcpCheckResultError {
-  state: 'error'
+  state: 'ERROR'
   error: Error,
   responseTime: number
 }
 
 interface TcpCheckResulTimeout {
-  state: 'timeout'
+  state: 'TIMEOUT'
   responseTime: number
 }
 
