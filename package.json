@@ -1,9 +1,9 @@
 {
-  "name": "tcp-check",
+  "name": "tcp-ping",
   "version": "0.0.1",
-  "description": "Checks your TCP endpoints",
+  "description": "Pings your TCP endpoints",
   "license": "MIT",
-  "repository": "tnolet/tcp-check",
+  "repository": "tnolet/tcp-ping]",
   "scripts": {
     "build": "rm -rf dist && tsc -b",
     "test": "jest"

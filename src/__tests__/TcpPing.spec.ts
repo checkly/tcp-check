@@ -1,9 +1,9 @@
 import * as net from 'net'
 import * as http from 'http'
 
-import { TcpCheck, TcpCheckOptions } from '../TcpCheck'
+import { TcpPing, TcpPingOptions } from '../TcpPing'
 
-describe('TcpCheck', () => {
+describe('TcpPing', () => {
   describe('.ping()', () => {
     const socketPort = 9001
     const httpPort = 8081
@@ -26,13 +26,19 @@ describe('TcpCheck', () => {
       httpServer.close()
     })
     test('returns a result for an open port', async () => {
-      const options: TcpCheckOptions = { host: 'localhost', port: socketPort }
-      const tcpCheckResult = await new TcpCheck().ping(options)
-      expect(tcpCheckResult.responseTime).toBeGreaterThan(0)
+      const options: TcpPingOptions = { host: 'localhost', port: socketPort }
+      const tcpPingResult = await new TcpPing().ping(options)
+      expect(tcpPingResult.timings.end).toBeGreaterThan(0)
+    })
+    test('returns a result for an open port: live', async () => {
+      const options: TcpPingOptions = { host: 'checklyhq.com', port: 443 }
+      const tcpPingResult = await new TcpPing().ping(options)
+      console.log(tcpPingResult)
+      expect(tcpPingResult.timings.end).toBeGreaterThan(0)
     })
     test('returns ECONNREFUSED for a closed port', async () => {
-      const options: TcpCheckOptions = { host: 'localhost', port: 12345 }
-      const result = await new TcpCheck().ping(options)
+      const options: TcpPingOptions = { host: 'localhost', port: 12345 }
+      const result = await new TcpPing().ping(options)
       switch (result.state) {
         case 'ERROR':
           expect(result.error.message).toEqual(
@@ -44,8 +50,8 @@ describe('TcpCheck', () => {
       }
     })
     test('returns ERR_SOCKET_BAD_PORT for an out of range port', async () => {
-      const options: TcpCheckOptions = { host: 'localhost', port: 123456789 }
-      const result = await new TcpCheck().ping(options)
+      const options: TcpPingOptions = { host: 'localhost', port: 123456789 }
+      const result = await new TcpPing().ping(options)
       switch (result.state) {
         case 'ERROR':
           expect(result.error?.message).toEqual(
@@ -54,19 +60,19 @@ describe('TcpCheck', () => {
       }
     })
     test('returns ENOTFOUND for a non-existing host', async () => {
-      const options: TcpCheckOptions = { host: 'blabla', port: 8000 }
-      const result = await new TcpCheck().ping(options)
+      const options: TcpPingOptions = { host: 'blabla', port: 8000 }
+      const result = await new TcpPing().ping(options)
       switch (result.state) {
         case 'ERROR':
           expect(result.error?.message).toEqual('getaddrinfo ENOTFOUND blabla')
       }
     })
     test('returns ENOENT even though the host and port are garbage', async () => {
-      const options: TcpCheckOptions = {
+      const options: TcpPingOptions = {
         host: 123 as any,
         port: 'umpalumpa' as any
       }
-      const result = await new TcpCheck().ping(options)
+      const result = await new TcpPing().ping(options)
       switch (result.state) {
         case 'ERROR':
       }
