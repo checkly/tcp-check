@@ -1,22 +1,25 @@
 import { Timings } from './Timer'
 
-interface TcpCheckResultSuccess {
+interface TcpPingResultSuccess {
   state: 'SUCCESS'
-  timings: Timings
+  timings: Timings,
+  response?: Buffer
 }
 
-interface TcpCheckResultError {
+interface TcpPingResultError {
   state: 'ERROR'
   error: Error,
   timings: Timings
+  response?: Buffer
 }
 
-interface TcpCheckResulTimeout {
+interface TcpPingResulTimeout {
   state: 'TIMEOUT'
   timings: Timings
+  response?: Buffer
 }
 
-type TcpPingResult = TcpCheckResultSuccess | TcpCheckResultError | TcpCheckResulTimeout
+type TcpPingResult = TcpPingResultSuccess | TcpPingResultError | TcpPingResulTimeout
 
 
 export default TcpPingResult
